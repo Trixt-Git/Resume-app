@@ -58,15 +58,44 @@ def render_marker(text: str, keys) -> None:
     # the answer still displays normally, it just has no source caption.
 
 
-for message in st.session_state["messages"]:
-    if message["role"] == "assistant":
-        with st.chat_message("assistant", avatar="💬"):
-            st.markdown('<div class="askwil-label">Wil</div>', unsafe_allow_html=True)
-            st.write(message["content"])
-            render_marker(message["content"], message.get("sources"))
-    else:
-        with st.chat_message("user"):
-            st.write(message["content"])
+def render_history() -> None:
+    for message in st.session_state["messages"]:
+        if message["role"] == "assistant":
+            with st.chat_message("assistant", avatar="💬"):
+                st.markdown('<div class="askwil-label">Wil</div>', unsafe_allow_html=True)
+                st.write(message["content"])
+                render_marker(message["content"], message.get("sources"))
+        else:
+            with st.chat_message("user"):
+                st.write(message["content"])
+
+
+def render_pending_reply() -> None:
+    last_12_messages = [
+        {"role": m["role"], "content": m["content"]}
+        for m in st.session_state["messages"][-12:]
+    ]
+    if last_12_messages and last_12_messages[0]["role"] != "user":
+        last_12_messages = last_12_messages[1:]
+
+    with st.chat_message("assistant", avatar="💬"):
+        st.markdown('<div class="askwil-label">Wil</div>', unsafe_allow_html=True)
+        citation_filter = CitationStreamFilter(
+            get_reply_stream(api_key, st.session_state["system_prompt"], last_12_messages)
+        )
+        display_text = st.write_stream(citation_filter)
+        render_marker(display_text, citation_filter.keys)
+    st.session_state["messages"].append(
+        {"role": "assistant", "content": display_text, "sources": citation_filter.keys}
+    )
+    st.session_state["pending_user_input"] = None
+
+
+if not is_empty:
+    with st.container(key="wilos_chat_panel"):
+        render_history()
+        if st.session_state["pending_user_input"]:
+            render_pending_reply()
 
 QUICK_ACTIONS = [
     ("Experience", "Walk me through your work experience."),
@@ -124,23 +153,3 @@ else:
 
 if user_input:
     submit_input(user_input)
-
-if st.session_state["pending_user_input"]:
-    last_12_messages = [
-        {"role": m["role"], "content": m["content"]}
-        for m in st.session_state["messages"][-12:]
-    ]
-    if last_12_messages and last_12_messages[0]["role"] != "user":
-        last_12_messages = last_12_messages[1:]
-
-    with st.chat_message("assistant", avatar="💬"):
-        st.markdown('<div class="askwil-label">Wil</div>', unsafe_allow_html=True)
-        citation_filter = CitationStreamFilter(
-            get_reply_stream(api_key, st.session_state["system_prompt"], last_12_messages)
-        )
-        display_text = st.write_stream(citation_filter)
-        render_marker(display_text, citation_filter.keys)
-    st.session_state["messages"].append(
-        {"role": "assistant", "content": display_text, "sources": citation_filter.keys}
-    )
-    st.session_state["pending_user_input"] = None

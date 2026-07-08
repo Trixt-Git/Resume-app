@@ -26,12 +26,42 @@ html, body, [data-testid="stAppViewContainer"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/* The top chrome (Deploy button, menu) is disabled via client.toolbarMode in
+   config.toml; this just collapses the now-empty header bar's reserved space. */
+[data-testid="stHeader"] {
+  height: 2.5rem;
+  background: transparent;
+}
+
 
 /* Layout */
 .block-container {
   max-width: 700px;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   padding-bottom: 2rem;
+}
+
+
+/* Sidebar navigation */
+[data-testid="stSidebar"] {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+
+[data-testid="stSidebarNavLink"] {
+  border-radius: 8px;
+  color: var(--muted) !important;
+  font-weight: 500;
+}
+
+[data-testid="stSidebarNavLink"]:hover {
+  background: var(--green-soft) !important;
+}
+
+[data-testid="stSidebarNavLink"][aria-current="page"] {
+  background: var(--green-soft) !important;
+  color: var(--green-dark) !important;
+  font-weight: 700;
 }
 
 
@@ -69,6 +99,12 @@ h1, h2 {
   color: var(--green-dark);
 }
 
+/* The "WilOS" page title in chat mode — tighter than Streamlit's default
+   heading margins so the conversation panel starts right under it. */
+[data-testid="stHeading"] h1 {
+  margin: 0 0 1rem;
+}
+
 
 /* Text */
 .stMarkdown p {
@@ -77,13 +113,26 @@ h1, h2 {
 }
 
 
-/* Chat cards */
-[data-testid="stChatMessage"] {
+/* Chat panel: gives the transcript a defined boundary instead of loose
+   bubbles floating on the page background. */
+.st-key-wilos_chat_panel {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 16px;
+  padding: 1.25rem 1.25rem 0.25rem;
+}
+
+.st-key-wilos_chat_panel [data-testid="stChatMessage"]:last-child {
+  margin-bottom: 0;
+}
+
+/* Chat cards */
+[data-testid="stChatMessage"] {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
   padding: 1rem 1.2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
 }
 
 
@@ -181,6 +230,35 @@ input:focus-visible {
 }
 
 
+/* Quick-action pill row, shared by the empty-state hero and the persistent
+   bottom bar — same column/button treatment in both places. */
+.st-key-wilos_hero [data-testid="stHorizontalBlock"],
+.st-key-wilos_bottom [data-testid="stHorizontalBlock"] {
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  flex-wrap: wrap !important;
+  width: auto !important;
+}
+
+.st-key-wilos_bottom [data-testid="stHorizontalBlock"] {
+  margin: 0.6rem auto 0 !important;
+}
+
+.st-key-wilos_hero [data-testid="stColumn"],
+.st-key-wilos_bottom [data-testid="stColumn"] {
+  width: fit-content !important;
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+}
+
+.st-key-wilos_hero .stButton button,
+.st-key-wilos_bottom .stButton button {
+  width: auto !important;
+  padding-left: 1.1rem;
+  padding-right: 1.1rem;
+}
+
+
 /* Centered landing hero (empty-state only) */
 .st-key-wilos_hero {
   display: flex !important;
@@ -196,50 +274,9 @@ input:focus-visible {
   text-align: center !important;
 }
 
-.st-key-wilos_hero [data-testid="stHorizontalBlock"] {
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  flex-wrap: nowrap !important;
-  width: auto !important;
-}
-
-.st-key-wilos_hero [data-testid="stColumn"] {
-  width: fit-content !important;
-  flex: 0 0 auto !important;
-  min-width: 0 !important;
-}
-
-.st-key-wilos_hero .stButton button {
-  width: auto !important;
-  padding-left: 1.1rem;
-  padding-right: 1.1rem;
-}
-
 .st-key-wilos_hero [data-testid="stChatInput"] {
   width: 100% !important;
   margin: 1.5rem 0 1.25rem !important;
-}
-
-
-/* Persistent bottom bar: chat input + quick actions once a conversation is active */
-.st-key-wilos_bottom [data-testid="stHorizontalBlock"] {
-  justify-content: center !important;
-  gap: 0.5rem !important;
-  flex-wrap: wrap !important;
-  width: auto !important;
-  margin: 0.6rem auto 0 !important;
-}
-
-.st-key-wilos_bottom [data-testid="stColumn"] {
-  width: fit-content !important;
-  flex: 0 0 auto !important;
-  min-width: 0 !important;
-}
-
-.st-key-wilos_bottom .stButton button {
-  width: auto !important;
-  padding-left: 1.1rem;
-  padding-right: 1.1rem;
 }
 
 
@@ -252,7 +289,7 @@ input:focus-visible {
   }
 
   .wilos-title {
-    font-size: 2.6rem;
+    font-size: 2.1rem;
   }
 
 }
