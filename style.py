@@ -215,6 +215,11 @@ input:focus-visible {
   padding-right: 1.1rem;
 }
 
+.st-key-wilos_hero [data-testid="stChatInput"] {
+  width: 100% !important;
+  margin: 1.5rem 0 1.25rem !important;
+}
+
 
 /* Mobile */
 @media (max-width: 640px) {
