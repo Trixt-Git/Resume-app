@@ -1,8 +1,8 @@
-# Ask Wil
+# WilOS
 
 ## What this is
 
-Ask Wil is an interactive AI resume — a Streamlit chat app that answers questions about Wil's professional background in first person, as if you were talking to him directly. It answers only from a verified set of facts about his experience, and it refuses anything outside that record rather than guessing or embellishing.
+WilOS is an interactive AI resume — a Streamlit chat app that answers questions about Wil's professional background in first person, as if you were talking to him directly. It answers only from a verified set of facts about his experience, and it refuses anything outside that record rather than guessing or embellishing.
 
 ## Why it's built this way
 
