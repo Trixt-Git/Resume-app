@@ -136,7 +136,7 @@ def submit_input(text):
 
 if is_empty:
     with st.container(key="wilos_hero"):
-        st.markdown('<div class="wilos-title">WilOS</div>', unsafe_allow_html=True)
+        st.markdown('<div class="wilos-title">Wil<span>OS</span></div>', unsafe_allow_html=True)
         st.markdown('<div class="wilos-subtitle">Ready when you are.</div>', unsafe_allow_html=True)
         user_input = st.chat_input("Ask about Wil's background, skills, or projects", key="hero_chat_input")
         clicked = render_quick_actions(st, "hero")
