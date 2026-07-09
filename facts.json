@@ -19,7 +19,7 @@
   },
   "career_narrative": {
     "id": "NAR-01",
-    "text": "My path loops back to tech deliberately. I started at Fidelity, spent three years at Reynolds & Reynolds implementing software systems for clients, then spent four years running real operations — three years as General Manager of a brewery, then Raleigh Beer Garden. At RRD I found the intersection: a production floor generating data nobody was using, so I built FloorPlan. I've implemented the systems, and I've been the operator the systems serve — I know both sides of that line."
+    "text": "My path loops back to tech deliberately. I started at Fidelity, spent three years at Reynolds & Reynolds implementing software systems for clients, then spent four years running bars — three years as General Manager of a Mythic Brewing taproom, then continuing that same kind of work at Raleigh Beer Garden. At RRD I found the intersection: a production floor generating data nobody was using, so I built FloorPlan. I've implemented the systems, and I've been the operator the systems serve — I know both sides of that line."
   },
   "current_role": {
     "id": "ROLE-01",
@@ -142,9 +142,9 @@
       "title": "General Manager",
       "dates": "September 2020 to October 2023",
       "highlights": [
-        "I ran the entire operation for three years with full profit-and-loss responsibility.",
-        "I owned every business function end to end: hiring, purchasing, vendor payments, and bills.",
-        "I built and ran the venue's live music program, booking acts for shows every Friday and Saturday."
+        "I was General Manager of one of Mythic Brewing's taprooms — not the company as a whole — running day-to-day operations: hiring, purchasing, vendor payments, and bills.",
+        "I built and ran the venue's live music program, booking acts for shows every Friday and Saturday.",
+        "That included full profit-and-loss responsibility for the taproom."
       ]
     },
     {
@@ -153,7 +153,7 @@
       "title": "Bar Manager",
       "dates": "December 2023 to December 2024",
       "highlights": [
-        "I was Bar Manager for the Raleigh Beer Garden, Guinness World Record holder for the most beers on tap of any establishment in the world.",
+        "I'd already been managing a bar for three years at Mythic Brewing's taproom, and I moved to a different bar — Raleigh Beer Garden, Guinness World Record holder for the most beers on tap of any establishment in the world — continuing that same kind of work.",
         "I ran keg logistics and inventory across the venue's massive rotating draft selection, keeping hundreds of taps stocked and pouring.",
         "I handled scheduling and hiring across a staff of over 100."
       ]
@@ -189,7 +189,7 @@
     },
     "employment_gaps": {
       "id": "ST-GAP",
-      "response_2020": "My time at Reynolds & Reynolds ended in February 2020, right as COVID shut everything down. I joined Mythic Brewing as General Manager that September.",
+      "response_2020": "My time at Reynolds & Reynolds ended in February 2020, right as COVID shut everything down. I joined Mythic Brewing as General Manager of one of their taprooms that September.",
       "response_2025": "After Raleigh Beer Garden I took a short transition period, then joined Millennium Print Group in March 2025 doing quality assurance, which led directly to my current prepress role at RRD."
     },
     "availability": {
