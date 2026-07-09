@@ -3,23 +3,28 @@ STYLE = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500&display=swap');
 
 :root {
-  --bg: #F3F1EA;
-  --surface: #FFFFFF;
-  --surface-soft: #FAF9F5;
+  /* Starbucks-inspired warm café palette — cream canvas anchoring a
+     four-tier green system, with gold reserved for ceremony accents only. */
+  --bg: #F2F0EB;           /* Neutral Warm — the load-bearing cream canvas */
+  --surface: #FFFFFF;       /* white card / chat-panel surface */
+  --surface-soft: #EDEBE9;  /* Ceramic — warmer wash for nested message cards */
 
-  --ink: #1F252B;
-  --muted: #66707A;
-  --line: #D8D5CB;
+  --ink: rgba(0, 0, 0, 0.87);   /* Text Black — warm 87% black, never pure */
+  --muted: rgba(0, 0, 0, 0.58); /* Text Black Soft — secondary/metadata */
+  --line: #E1DED4;              /* warm hairline that reads on cream */
 
-  --primary: #2F4A7D;
-  --primary-dark: #1F355E;
-  --primary-soft: #E8EEF8;
+  /* Four-tier green, each mapped to a surface role (not one "brand green") */
+  --primary: #00754A;       /* Green Accent — interactive: labels, focus, CTA */
+  --primary-dark: #006241;  /* Starbucks Green — headings */
+  --primary-soft: #D4E9E2;  /* Green Light — hover / active tints */
 
-  --accent: #B47A2B;
-  --accent-soft: #F7EBD7;
+  /* Gold — Starbucks reserves this for ceremony; here, sparing accent only */
+  --accent: #CBA258;
+  --accent-soft: #FAF6EE;   /* Gold Lightest — cream-gold wash */
 
-  --warning: #9A5A3C;
-  --warning-soft: #F4E5DE;
+  /* Refusal / outside-verified-facts notice — warm gold-brown, readable */
+  --warning: #8A6A2E;
+  --warning-soft: #FAF6EE;
 }
 
 
@@ -28,6 +33,9 @@ html, body, [data-testid="stAppViewContainer"] {
   background-color: var(--bg);
   color: var(--ink);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* SoDoSans reads slightly compressed; Inter (its substitute) gets the same
+     tight -0.01em tracking to keep that confident, café-signage voice. */
+  letter-spacing: -0.01em;
 }
 
 /* The top chrome (Deploy button, menu) is disabled via client.toolbarMode in
@@ -122,17 +130,21 @@ h1, h2 {
 .st-key-wilos_chat_panel {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 1.25rem 1.25rem 0.25rem;
+  /* Whisper-soft dual shadow (Starbucks card spec) — flat-plus-hint-of-lift,
+     never a single heavy drop shadow. */
+  box-shadow: 0 0 0.5px rgba(0, 0, 0, 0.14), 0 1px 1px rgba(0, 0, 0, 0.24);
 }
 
 .st-key-wilos_chat_panel [data-testid="stChatMessage"]:last-child {
   margin-bottom: 0;
 }
 
-/* Chat cards */
+/* Chat cards — nested inside the white panel, so they use the warmer Ceramic
+   wash and stay flat (borders, no own shadow) per the nested-content rule. */
 [data-testid="stChatMessage"] {
-  background: var(--bg);
+  background: var(--surface-soft);
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 1rem 1.2rem;
@@ -177,22 +189,28 @@ h1, h2 {
 }
 
 
-/* Prompt buttons */
+/* Prompt buttons — Starbucks full-pill (50px) with the signature
+   scale(0.95) active press. */
 .stButton button {
   width: 100%;
   min-height: 46px;
-  border-radius: 12px !important;
+  border-radius: 50px !important;
   border: 1px solid var(--line) !important;
   background: var(--surface) !important;
   color: var(--primary-dark) !important;
   font-weight: 600;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 
 .stButton button:hover {
   background: var(--primary-soft) !important;
   border-color: var(--primary) !important;
+}
+
+
+.stButton button:active {
+  transform: scale(0.95);
 }
 
 
@@ -225,6 +243,7 @@ input:focus-visible {
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 0.9rem 1rem;
+  box-shadow: 0 0 0.5px rgba(0, 0, 0, 0.14), 0 1px 1px rgba(0, 0, 0, 0.24);
 }
 
 
