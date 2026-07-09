@@ -6,7 +6,7 @@ This file is the project's build specification, written before any code existed.
 
 **Amendment log** (nothing changes in this spec without an entry here):
 - v1.1 — added Phase 5 honesty eval, starter chips, deploy spend-cap gate
-- v1.2 — Phase 6 expanded: SPEC.md committed as deliverable, README case study, published eval results, cost sentence
+- v1.2 — Phase 6 expanded: BUILD_MAP.md committed as deliverable, README case study, published eval results, cost sentence
 - v1.3 — Appendix B scaling analysis + README scaling path section
 - v1.4 — fixed cap wording (30 exchanges = 60 stored messages; code was right, prose was wrong); corrected cost sentence after verifying Haiku pricing ($0.02 claim was ~10x off)
 - v1.5 — prompt caching locked into Phase 3 (system prompt only, 5-min ephemeral); cost sentence updated
@@ -65,7 +65,7 @@ ask-wil/
 ├── prompt_builder.py         # loads facts.json, builds system prompt
 ├── README.md
 ├── requirements.txt
-├── SPEC.md                   # this document, committed verbatim — a deliverable itself
+├── BUILD_MAP.md                   # this document, committed verbatim — a deliverable itself
 └── tests/
     ├── test_facts_schema.py
     └── test_prompt_builder.py
@@ -413,9 +413,9 @@ DENY = ["haven't worked with", "haven't used", "don't claim",
 
 ---
 
-### Phase 6 — README + SPEC + repo hygiene
+### Phase 6 — README + BUILD_MAP + repo hygiene
 
-**Task A — commit this spec.** Save this entire document, verbatim, as `SPEC.md` at the repo root, prepended with this LOCKED intro paragraph:
+**Task A — commit this spec.** Save this entire document, verbatim, as `BUILD_MAP.md` at the repo root, prepended with this LOCKED intro paragraph:
 
 > This file is the project's build specification, written before any code existed. All design decisions were made once, up front, by a high-capability model and locked with rationale; execution of each phase was then delegated to a lower-cost model that follows the spec without making design choices. The tiering is deliberate — judgment is expensive, execution is cheap, and a spec tight enough to delegate safely is itself the proof of the design. It is committed here as a deliverable in its own right.
 
@@ -430,12 +430,12 @@ DENY = ["haven't worked with", "haven't used", "don't claim",
 7. **Honesty policy** — one paragraph: the bot's core feature is refusing to overclaim — mirroring how Wil writes his resume — and that this property is verified by an automated eval, not just intended.
 8. **Scaling path** — this LOCKED paragraph verbatim:
 
-> This is deliberately a single-user prototype, and its main decisions have stated expiration conditions: system-prompt injection holds until the fact corpus outgrows the context window, at which point RAG becomes the right tool; the flat facts.json holds until multiple editors need governance, at which point it becomes a database with an approval workflow; the manual eval gate holds until prompts change frequently, at which point it runs in CI. A full tier-by-tier scaling analysis — department tool through enterprise platform, including what in this build survives scaling and what doesn't — is in SPEC.md, Appendix B.
+> This is deliberately a single-user prototype, and its main decisions have stated expiration conditions: system-prompt injection holds until the fact corpus outgrows the context window, at which point RAG becomes the right tool; the flat facts.json holds until multiple editors need governance, at which point it becomes a database with an approval workflow; the manual eval gate holds until prompts change frequently, at which point it runs in CI. A full tier-by-tier scaling analysis — department tool through enterprise platform, including what in this build survives scaling and what doesn't — is in BUILD_MAP.md, Appendix B.
 
-**Definition of done:** `SPEC.md` exists at root and begins with the intro paragraph followed by the unmodified spec (including Appendix B); README renders on GitHub without broken formatting and contains all eight sections in order, including a real eval output block; a stranger could run the app from it; `git log` shows at least one commit per completed phase; final `git push` done (Wil's standing rule: commit and push at end of every work session).
+**Definition of done:** `BUILD_MAP.md` exists at root and begins with the intro paragraph followed by the unmodified spec (including Appendix B); README renders on GitHub without broken formatting and contains all eight sections in order, including a real eval output block; a stranger could run the app from it; `git log` shows at least one commit per completed phase; final `git push` done (Wil's standing rule: commit and push at end of every work session).
 
 **If you get stuck:**
-- *Common mistake:* summarizing, reformatting, or "cleaning up" this spec when creating `SPEC.md`. Fix: verbatim copy plus the intro paragraph — the unedited spec is the artifact.
+- *Common mistake:* summarizing, reformatting, or "cleaning up" this spec when creating `BUILD_MAP.md`. Fix: verbatim copy plus the intro paragraph — the unedited spec is the artifact.
 - *Common mistake:* fabricating or hand-editing the eval output block because a real run wasn't done. Fix: run `python eval_honesty.py` for real and paste its stdout. If it isn't 24/24, stop and report to Wil — do not publish a failing or fake result.
 - *Common mistake:* padding the README with badges, roadmaps, and license boilerplate. Fix: only the eight sections listed.
 - *Common mistake:* letting scaling language leak into claims — e.g., adding "designed for enterprise deployment" to the What-this-is section, or adding RAG/Kubernetes/FastAPI to any skills or project description. Fix: Appendix B is analysis of what *would* change; nothing in it is built, and nothing in it may be claimed — in the README, in facts.json, or by the bot.
@@ -473,7 +473,7 @@ Then: push to public GitHub → share.streamlit.io → New app → select repo, 
 
 ---
 
-## 7. Appendix B — Scaling analysis (LOCKED text; ships inside SPEC.md automatically via Phase 6 Task A)
+## 7. Appendix B — Scaling analysis (LOCKED text; ships inside BUILD_MAP.md automatically via Phase 6 Task A)
 
 **Positioning rule for this section:** this is analysis, not a roadmap. Nothing below gets built in this project, and neither Wil nor the bot may claim any of it as experience. The point is the opposite: every "missing" enterprise feature here is a deliberate decision with a stated **trigger condition** — the observable event at which the current choice stops being correct. Decisions that expire on stated conditions are architecture; decisions that expire on vibes are debt.
 

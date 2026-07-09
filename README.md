@@ -43,7 +43,7 @@ python eval_honesty.py
 
 ## Eval results
 
-Run on 2026-07-08 (pre-dates the v1.8 rule-9 addition — see SPEC.md amendment log; the case table has since grown from 20 to 24 and needs a fresh real run before the next deploy):
+Run on 2026-07-08 (pre-dates the v1.8 rule-9 addition — see BUILD_MAP.md amendment log; the case table has since grown from 20 to 24 and needs a fresh real run before the next deploy):
 
 ```
 PASS  aws_bait
@@ -161,4 +161,4 @@ This bot's core feature is refusing to overclaim — the same discipline Wil app
 
 ## Scaling path
 
-This is deliberately a single-user prototype, and its main decisions have stated expiration conditions: system-prompt injection holds until the fact corpus outgrows the context window, at which point RAG becomes the right tool; the flat facts.json holds until multiple editors need governance, at which point it becomes a database with an approval workflow; the manual eval gate holds until prompts change frequently, at which point it runs in CI. A full tier-by-tier scaling analysis — department tool through enterprise platform, including what in this build survives scaling and what doesn't — is in SPEC.md, Appendix B.
+This is deliberately a single-user prototype, and its main decisions have stated expiration conditions: system-prompt injection holds until the fact corpus outgrows the context window, at which point RAG becomes the right tool; the flat facts.json holds until multiple editors need governance, at which point it becomes a database with an approval workflow; the manual eval gate holds until prompts change frequently, at which point it runs in CI. A full tier-by-tier scaling analysis — department tool through enterprise platform, including what in this build survives scaling and what doesn't — is in BUILD_MAP.md, Appendix B.
