@@ -3,20 +3,23 @@ STYLE = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500&display=swap');
 
 :root {
-  --bg: #F7F8F5;
+  --bg: #F3F1EA;
   --surface: #FFFFFF;
-  --ink: #17251B;
-  --muted: #5C6B61;
-  --line: #DCE5DB;
+  --surface-soft: #FAF9F5;
 
-  /* Vivid green accent — richer and more saturated than the previous
-     dark-olive tone, which read as barely-there against white/near-white. */
-  --green: #15803D;
-  --green-dark: #166534;
-  --green-soft: #DCFCE7;
+  --ink: #1F252B;
+  --muted: #66707A;
+  --line: #D8D5CB;
 
-  --gold: #A46F18;
-  --gold-soft: #FBF4E3;
+  --primary: #2F4A7D;
+  --primary-dark: #1F355E;
+  --primary-soft: #E8EEF8;
+
+  --accent: #B47A2B;
+  --accent-soft: #F7EBD7;
+
+  --warning: #9A5A3C;
+  --warning-soft: #F4E5DE;
 }
 
 
@@ -56,12 +59,12 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 
 [data-testid="stSidebarNavLink"]:hover {
-  background: var(--green-soft) !important;
+  background: var(--primary-soft) !important;
 }
 
 [data-testid="stSidebarNavLink"][aria-current="page"] {
-  background: var(--green-soft) !important;
-  color: var(--green-dark) !important;
+  background: var(--primary-soft) !important;
+  color: var(--primary-dark) !important;
   font-weight: 700;
 }
 
@@ -80,7 +83,7 @@ html, body, [data-testid="stAppViewContainer"] {
 .wilos-title span {
   font-size: 1.25em;
   font-weight: 700;
-  color: var(--green);
+  color: var(--accent);
   letter-spacing: -0.05em;
 }
 
@@ -97,7 +100,7 @@ html, body, [data-testid="stAppViewContainer"] {
 h1, h2 {
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 500;
-  color: var(--green-dark);
+  color: var(--primary-dark);
 }
 
 /* The "WilOS" page title in chat mode — tighter than Streamlit's default
@@ -141,7 +144,7 @@ h1, h2 {
 .askwil-label {
   font-size: 0.7rem;
   font-weight: 700;
-  color: var(--green);
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 0.5rem;
@@ -160,16 +163,16 @@ h1, h2 {
 
 
 .askwil-marker--source {
-  border-left-color: var(--green);
-  background: var(--green-soft);
+  border-left-color: var(--primary);
+  background: var(--primary-soft);
   color: var(--muted);
 }
 
 
 .askwil-marker--refusal {
-  border-left-color: var(--gold);
-  background: var(--gold-soft);
-  color: var(--gold);
+  border-left-color: var(--warning);
+  background: var(--warning-soft);
+  color: var(--warning);
   font-weight: 600;
 }
 
@@ -181,15 +184,15 @@ h1, h2 {
   border-radius: 12px !important;
   border: 1px solid var(--line) !important;
   background: var(--surface) !important;
-  color: var(--green-dark) !important;
+  color: var(--primary-dark) !important;
   font-weight: 600;
   transition: all 0.15s ease;
 }
 
 
 .stButton button:hover {
-  background: var(--green-soft) !important;
-  border-color: var(--green) !important;
+  background: var(--primary-soft) !important;
+  border-color: var(--primary) !important;
 }
 
 
@@ -203,7 +206,7 @@ h1, h2 {
 .stButton button:focus-visible,
 textarea:focus-visible,
 input:focus-visible {
-  outline: 2px solid var(--green) !important;
+  outline: 2px solid var(--primary) !important;
   outline-offset: 2px;
 }
 
