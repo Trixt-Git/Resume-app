@@ -41,9 +41,14 @@ def test_projects_have_all_five_keys():
         assert expected_keys.issubset(project.keys())
 
 
-def test_sensitive_topics_values_are_strings():
+def test_sensitive_topics_entries_have_id_and_string_responses():
     facts = load_facts()
-    for key, value in facts["sensitive_topics"].items():
-        assert isinstance(value, str)
-        if value == "":
-            print(f"WARNING: sensitive_topics.{key} is empty")
+    for key, entry in facts["sensitive_topics"].items():
+        assert isinstance(entry, dict)
+        assert isinstance(entry["id"], str) and entry["id"]
+        responses = {k: v for k, v in entry.items() if k != "id"}
+        assert responses, f"sensitive_topics.{key} has no response field"
+        for response_key, value in responses.items():
+            assert isinstance(value, str)
+            if value == "":
+                print(f"WARNING: sensitive_topics.{key}.{response_key} is empty")
