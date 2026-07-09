@@ -92,6 +92,7 @@ interests, `how_i_work`), and closed out the WilOS rebrand that
 |--------|--------|
 | `d7e12d4` | Update `facts.json` to the expanded schema; add `career_narrative` and `personal` as citable FACTS keys in `citations.py`/`prompt_builder.py`; fix the system prompt's leftover "Ask Wil" persona name to "WilOS" (mirrored in `BUILD_MAP.md`'s locked-prompt block per its own sync rule); update `test_facts_schema.py` for the new `sensitive_topics` `{id, response}` shape |
 | `251edb5` | Rename README title and intro line from "Ask Wil" to "WilOS" (the frozen eval-results transcript further down is left as-is — it's a verbatim record of an actual past run, from before the rebrand) |
+| `de49c3b` | Correct Mythic Brewing scope (one taproom, not the whole company) and reorder its highlights so full P&L responsibility isn't the leading statement; reframe Raleigh Beer Garden as a lateral move continuing existing bar-management experience rather than a first move into it |
 
 ---
 
