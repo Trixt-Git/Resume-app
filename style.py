@@ -95,6 +95,12 @@ html, body, [data-testid="stAppViewContainer"] {
   letter-spacing: -0.05em;
 }
 
+/* Chat-mode wordmark: same treatment as the hero, just a little more room
+   before the conversation panel. */
+.wilos-title--chat {
+  margin-bottom: 1rem;
+}
+
 .wilos-subtitle {
   color: var(--muted);
   font-size: 1rem;

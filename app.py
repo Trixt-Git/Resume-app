@@ -23,7 +23,13 @@ if "pending_user_input" not in st.session_state:
 is_empty = not st.session_state["messages"]
 
 if not is_empty:
-    st.title("WilOS")
+    # Same wordmark markup as the hero so the Fidelity-green "OS" stays
+    # consistent across the hero -> chat state change (the --chat modifier
+    # only adjusts bottom spacing).
+    st.markdown(
+        '<div class="wilos-title wilos-title--chat">Wil<span>OS</span></div>',
+        unsafe_allow_html=True,
+    )
 
 REFUSAL_MARKERS = [
     "haven't worked with", "haven't used", "don't claim",
