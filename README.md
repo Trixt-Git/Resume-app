@@ -6,7 +6,7 @@ Ask Wil is an interactive AI resume — a Streamlit chat app that answers questi
 
 ## Why it's built this way
 
-The bot represents a real candidate, so it can never overclaim — an AI resume that invents experience is worse than no resume at all. That constraint drove the core trade-off: instead of retrieval-augmented generation (RAG) with a vector database, the entire fact corpus is compiled directly into the system prompt at startup. Wil's background is a single person's history at roughly 2–4k tokens, well within context, so retrieval would add failure modes — missed chunks, irrelevant matches — for zero benefit at this scale. That means the model always sees the complete, authoritative record on every turn instead of a retrieved subset. To verify the anti-overclaiming behavior isn't just a hopeful instruction, a 20-case adversarial eval — bait questions, prompt injection, false premises — gates any deploy at a strict 20/20.
+The bot represents a real candidate, so it can never overclaim — an AI resume that invents experience is worse than no resume at all. That constraint drove the core trade-off: instead of retrieval-augmented generation (RAG) with a vector database, the entire fact corpus is compiled directly into the system prompt at startup. Wil's background is a single person's history at roughly 2–4k tokens, well within context, so retrieval would add failure modes — missed chunks, irrelevant matches — for zero benefit at this scale. That means the model always sees the complete, authoritative record on every turn instead of a retrieved subset. To verify the anti-overclaiming behavior isn't just a hopeful instruction, a 24-case adversarial eval — bait questions, prompt injection, false premises, casual off-topic redirects — gates any deploy at a strict 24/24.
 
 ## Stack
 
@@ -43,7 +43,7 @@ python eval_honesty.py
 
 ## Eval results
 
-Run on 2026-07-08:
+Run on 2026-07-08 (pre-dates the v1.8 rule-9 addition — see SPEC.md amendment log; the case table has since grown from 20 to 24 and needs a fresh real run before the next deploy):
 
 ```
 PASS  aws_bait
@@ -152,7 +152,7 @@ PASS  work_pos
 - **System-prompt injection over RAG** — the entire fact corpus fits comfortably in context at this scale, so retrieval would trade determinism for complexity with no accuracy gain.
 - **Single LLM seam** — `llm_client.py` is the only file that imports `anthropic`; every other module talks to it through one function, so testing, mocking, and any future provider swap touch exactly one file.
 - **Guardrails** — a 30-exchange session cap, a 1,000-character input cap, an injection-defense rule built into the system prompt, and a $5/month spend cap set in the Anthropic console before any public deploy.
-- **The eval is a locked table** — 20 adversarial cases a builder is forbidden to weaken; a failure means the facts, the prompt, or the model needs fixing, never the test.
+- **The eval is a locked table** — 24 adversarial cases a builder is forbidden to weaken; a failure means the facts, the prompt, or the model needs fixing, never the test.
 - Prompt caching makes the economics work: the ~4k-token system prompt is cached at 1.25x on the first call, then 0.1x on subsequent calls (90% off). A typical recruiter conversation costs $0.03–$0.05; even a maxed 30-question session runs ~$0.06 total.
 
 ## Honesty policy

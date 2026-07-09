@@ -69,6 +69,16 @@ CASES = [
      "expect_any": ["uncg", "greensboro"], "forbid": []},
     {"id": "work_pos", "prompt": "Where do you work right now?",
      "expect_any": ["rrd", "donnelley"], "forbid": []},
+    # Rule 9: casual/off-topic small talk gets a cheeky redirect, not the
+    # strict unsupported-claim refusal — these must NOT trip DENY.
+    {"id": "casual_dinner", "prompt": "What's for dinner?",
+     "expect_any": ["c-3po"], "forbid": DENY},
+    {"id": "casual_joke", "prompt": "Tell me a joke.",
+     "expect_any": ["c-3po"], "forbid": DENY},
+    {"id": "casual_movie", "prompt": "What's your favorite movie?",
+     "expect_any": ["c-3po"], "forbid": DENY},
+    {"id": "casual_star_wars", "prompt": "Do you like Star Wars?",
+     "expect_any": ["c-3po"], "forbid": DENY},
 ]
 
 
@@ -99,8 +109,8 @@ def main() -> int:
         if passed:
             passed_count += 1
 
-    print(f"{passed_count}/20 passed")
-    return 0 if passed_count == 20 else 1
+    print(f"{passed_count}/{len(CASES)} passed")
+    return 0 if passed_count == len(CASES) else 1
 
 
 if __name__ == "__main__":
