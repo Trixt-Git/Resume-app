@@ -9,10 +9,11 @@ STYLE = """
   --muted: #5C6B61;
   --line: #DCE5DB;
 
-  /* Fidelity-green palette (matches .streamlit/config.toml primaryColor) */
-  --green: #3F7623;
-  --green-dark: #2D5519;
-  --green-soft: #EEF4EC;
+  /* Vivid green accent — richer and more saturated than the previous
+     dark-olive tone, which read as barely-there against white/near-white. */
+  --green: #15803D;
+  --green-dark: #166534;
+  --green-soft: #DCFCE7;
 
   --gold: #A46F18;
   --gold-soft: #FBF4E3;
