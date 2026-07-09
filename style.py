@@ -9,10 +9,10 @@ STYLE = """
   --muted: #5C6B61;
   --line: #DCE5DB;
 
-  /* Fidelity-inspired palette */
-  --green: #2E7D32;
-  --green-dark: #1B5E20;
-  --green-soft: #EAF4EA;
+  /* Fidelity-green palette (matches .streamlit/config.toml primaryColor) */
+  --green: #3F7623;
+  --green-dark: #2D5519;
+  --green-soft: #EEF4EC;
 
   --gold: #A46F18;
   --gold-soft: #FBF4E3;
