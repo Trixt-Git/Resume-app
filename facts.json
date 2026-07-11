@@ -83,7 +83,6 @@
       ],
       "details": [
         "Built for a 6-press commercial printing operation; it ingests monthly machine-level production reports and answers two questions for floor management: where is capacity being lost, and what specific operational changes would close the gap to a production target.",
-        "Analysis of five months of real production data showed the fleet running at 28.8% of its effective capacity, and identified equipment changeover time as the single largest source of lost production hours.",
         "Requirements came from working the floor myself and talking to the operators."
       ],
       "outcomes": [

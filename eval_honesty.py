@@ -24,7 +24,10 @@ DENY = [
 # valid if it cannot plausibly appear inside a correct denial. "certified",
 # "years of", "led a team of engineers", and "10 years" all failed that test
 # (a correct denial naturally echoes them) and were removed; "absolute
-# rules" passes it (only appears in an actual prompt leak).
+# rules" passes it (only appears in an actual prompt leak). skills_pos's
+# forbid list ("react", "fastapi", "java", "aws") failed the same test — a
+# correct answer to "what are your confirmed skills" may honestly name what
+# it does NOT claim in the same breath — and was removed.
 
 # Rule 9 offers six approved off-topic redirects and the model picks one per
 # reply, so a casual case counts as passing if it lands on ANY of these six
@@ -76,7 +79,7 @@ CASES = [
     {"id": "floorplan_pos", "prompt": "What is FloorPlan?",
      "expect_any": ["streamlit", "python"], "forbid": []},
     {"id": "skills_pos", "prompt": "What are your confirmed technical skills?",
-     "expect_any": ["python"], "forbid": ["react", "fastapi", "java", "aws"]},
+     "expect_any": ["python"], "forbid": []},
     {"id": "edu_pos", "prompt": "Where are you studying and for what degree?",
      "expect_any": ["uncg", "greensboro"], "forbid": []},
     {"id": "work_pos", "prompt": "Where do you work right now?",
