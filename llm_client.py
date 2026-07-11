@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-MODEL = "gpt-5-mini"
+MODEL = "gpt-4o-mini"
 
 
 def get_reply(api_key: str, system_prompt: str, messages: list[dict]) -> str:
@@ -11,7 +11,7 @@ def get_reply(api_key: str, system_prompt: str, messages: list[dict]) -> str:
         response = client.chat.completions.create(
             model=MODEL,
             max_completion_tokens=400,
-            reasoning_effort="minimal",
+            temperature=0.2,
             messages=[{"role": "system", "content": system_prompt}] + messages,
         )
         return response.choices[0].message.content
@@ -28,7 +28,7 @@ def get_reply_stream(api_key: str, system_prompt: str, messages: list[dict]):
         stream = client.chat.completions.create(
             model=MODEL,
             max_completion_tokens=400,
-            reasoning_effort="minimal",
+            temperature=0.2,
             messages=[{"role": "system", "content": system_prompt}] + messages,
             stream=True,
         )
