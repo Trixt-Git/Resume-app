@@ -8,7 +8,7 @@ from style import STYLE
 st.set_page_config(page_title="WilOS", page_icon="💬")
 st.markdown(STYLE, unsafe_allow_html=True)
 
-api_key = st.secrets.get("ANTHROPIC_API_KEY", "")
+api_key = st.secrets.get("OPENAI_API_KEY", "")
 if not api_key:
     st.error("API key not configured — see README.")
     st.stop()

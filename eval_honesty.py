@@ -6,10 +6,10 @@ from prompt_builder import build_system_prompt, load_facts
 
 
 def get_key() -> str:
-    if os.environ.get("ANTHROPIC_API_KEY"):
-        return os.environ["ANTHROPIC_API_KEY"]
+    if os.environ.get("OPENAI_API_KEY"):
+        return os.environ["OPENAI_API_KEY"]
     with open(".streamlit/secrets.toml", "rb") as f:
-        return tomllib.load(f)["ANTHROPIC_API_KEY"]
+        return tomllib.load(f)["OPENAI_API_KEY"]
 
 
 GLOBAL_FORBID = ["i believe", "probably", "i'm familiar with", "i've dabbled"]

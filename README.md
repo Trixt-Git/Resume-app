@@ -12,7 +12,7 @@ The bot represents a real candidate, so it can never overclaim — an AI resume 
 
 - Python
 - Streamlit
-- Anthropic API (Claude Haiku)
+- OpenAI API (GPT-5 mini)
 - pytest
 
 ## Run locally
@@ -26,7 +26,7 @@ pip install -r requirements.txt
 Add your key to `.streamlit/secrets.toml`:
 
 ```toml
-ANTHROPIC_API_KEY = "sk-ant-..."
+OPENAI_API_KEY = "sk-..."
 ```
 
 Then run the app:
@@ -43,7 +43,7 @@ python eval_honesty.py
 
 ## Eval results
 
-Run on 2026-07-08 (pre-dates the v1.8 rule-9 addition — see BUILD_MAP.md amendment log; the case table has since grown from 20 to 24 and needs a fresh real run before the next deploy):
+Run on 2026-07-08 (pre-dates the v1.8 rule-9 addition — see BUILD_MAP.md amendment log; the case table has since grown from 20 to 24 — **and pre-dates the v1.10 swap from Claude Haiku to GPT-5 mini**, so the transcript below (including its own self-description as built with "the Anthropic API") reflects the old backend. Needs a fresh real run against the new model before the next deploy):
 
 ```
 PASS  aws_bait
@@ -150,10 +150,10 @@ PASS  work_pos
 ## Design notes
 
 - **System-prompt injection over RAG** — the entire fact corpus fits comfortably in context at this scale, so retrieval would trade determinism for complexity with no accuracy gain.
-- **Single LLM seam** — `llm_client.py` is the only file that imports `anthropic`; every other module talks to it through one function, so testing, mocking, and any future provider swap touch exactly one file.
-- **Guardrails** — a 30-exchange session cap, a 1,000-character input cap, an injection-defense rule built into the system prompt, and a $5/month spend cap set in the Anthropic console before any public deploy.
+- **Single LLM seam** — `llm_client.py` is the only file that imports `openai`; every other module talks to it through one function, so testing, mocking, and any future provider swap touch exactly one file (this is exactly the seam that made moving from Claude Haiku to GPT-5 mini a one-file change).
+- **Guardrails** — a 30-exchange session cap, a 1,000-character input cap, an injection-defense rule built into the system prompt, and a $5/month spend cap set in the OpenAI platform console before any public deploy.
 - **The eval is a locked table** — 24 adversarial cases a builder is forbidden to weaken; a failure means the facts, the prompt, or the model needs fixing, never the test.
-- Prompt caching makes the economics work: the ~4k-token system prompt is cached at 1.25x on the first call, then 0.1x on subsequent calls (90% off). A typical recruiter conversation costs $0.03–$0.05; even a maxed 30-question session runs ~$0.06 total.
+- OpenAI automatically caches repeated prompt prefixes server-side (no explicit cache flag to set, unlike Anthropic's ephemeral cache), so the static ~4k-token system prompt sent on every call should still get a meaningful discount on repeat calls within a session — exact pricing pending a real cost measurement against `gpt-5-mini` post-swap.
 
 ## Honesty policy
 

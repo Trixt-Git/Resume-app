@@ -98,7 +98,7 @@
       "stack": [
         "Python",
         "Streamlit",
-        "Anthropic API",
+        "OpenAI API",
         "pytest"
       ],
       "details": [

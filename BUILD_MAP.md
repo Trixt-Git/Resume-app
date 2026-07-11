@@ -14,6 +14,7 @@ This file is the project's build specification, written before any code existed.
 - v1.7 — eval run surfaced that substring forbids are negation-blind (team_lead's correct denial echoed the forbidden phrase intermittently). Audit found 3 more latent instances of the same defect. Fix: removed 4 negation-blind forbid strings ("certified", "years of", "led a team of engineers", "10 years"); added rule 8 to the system prompt anchoring false-premise corrections to a sentence containing a DENY phrase; added a LOCKED meta-rule that forbid strings must be impossible in a correct denial; Phase 2 tests assert the rule-8 anchor.
 - v1.8 — rule 1's fallback was firing on purely casual small talk ("What's for dinner?"), producing a socially awkward strict refusal for something that was never an unsupported professional claim. Fix: rule 1 narrowed in scope to background/professional topics (anchor sentence unchanged); added rule 9, a separate cheeky self-aware redirect for casual off-topic small talk, anchored to a fixed two-sentence pattern ("more C-3PO than [role]... only useful within my programming" / "I'll do much better") with an explicit precedence clause deferring to rules 1/3/8 whenever a message also raises a real skills/experience/background claim. Rule 7 and the VOICE closing line extended to protect the new anchor from restyling, same treatment rules 1/3/5/8 already get. Phase 2 tests assert the rule-9 anchor. Eval case table extended from 20 to 24 cases (4 new casual-redirect cases); pass bar is now 24/24, and the existing 20 cases are unchanged. The README's published eval results predate this change and need a fresh real run before the next deploy.
 - v1.9 — rule 9's single fixed redirect line read as repetitive across different casual topics. Fix: rule 9 now offers six approved redirect styles (varying phrasing, all still exact/locked) and instructs the model to vary which one it picks rather than defaulting to the same line every time; rule 7 and the VOICE closing line updated to say "whichever of its six lines" is used must survive unchanged, instead of naming one specific phrase. Phase 2 tests assert all six anchors are present in the built prompt. Eval's casual-redirect cases now accept any of six distinctive per-style substrings (`CASUAL_REDIRECT_ANCHORS`) instead of only the C-3PO phrase, since the model may land on any of the six per reply; case count and pass bar (24/24) unchanged.
+- v1.10 — provider swap: LLM backend moved from Anthropic (`claude-haiku-4-5-20251001`) to OpenAI (`gpt-5-mini`), exercising exactly the "future provider swap" seam Section 1 called out. Only `llm_client.py`'s internals, the `*_API_KEY` name, and `requirements.txt` changed; the system prompt, facts schema, guardrails, and eval case table are untouched. `temperature=0.2` dropped — `gpt-5-mini` only supports the default temperature — and `max_tokens` became `max_completion_tokens` with `reasoning_effort="minimal"` (fastest, most direct instruction-following, matching Haiku's role here). Anthropic's explicit `cache_control` ephemeral caching has no OpenAI equivalent to set — OpenAI caches long, repeated prompt prefixes automatically server-side — so the README's cost sentence and this doc's cache description are now approximate pending a real cost re-measurement. The published eval results in README predate this swap (and already predated v1.8/v1.9) and need a fresh real run before the next deploy.
 
 **Project:** Interactive AI resume — a Streamlit chat app that answers questions about Wil's background in first person, using only verified facts, refusing everything else.
 
@@ -36,14 +37,14 @@ This file is the project's build specification, written before any code existed.
 | Decision | Locked choice | Why (for Wil, not for debate) |
 |---|---|---|
 | UI framework | Streamlit (`st.chat_input` / `st.chat_message`) | Confirmed skill; zero new frontend learning; deploys to Streamlit Community Cloud unchanged |
-| LLM backend | Anthropic API, model `claude-haiku-4-5-20251001` | Cheapest strong instruction-follower; the anti-hallucination rule is an instruction-following problem, and Haiku holds refusal rules reliably at temp 0.2. Short recruiter chats cost fractions of a cent |
+| LLM backend | OpenAI API, model `gpt-5-mini` | Cheap, strong instruction-follower; `reasoning_effort="minimal"` keeps latency and cost down for a task that needs fast, literal rule-following rather than deep reasoning. Short recruiter chats cost fractions of a cent |
 | Facts injection | **Full facts file compiled into the system prompt at app start.** No RAG, no vector DB, no embeddings | The corpus is one person's background (~2–4k tokens). Retrieval adds failure modes and zero benefit at this scale |
 | Facts format | JSON (`facts.json`), not YAML | JSON is validatable with stdlib and immune to indentation errors (Wil sometimes edits from a phone) |
-| Where the LLM call lives | `llm_client.py`, one function. `app.py` never imports `anthropic` directly | Single seam for testing, mocking, and a future provider swap |
+| Where the LLM call lives | `llm_client.py`, one function. `app.py` never imports `openai` directly | Single seam for testing, mocking, and a future provider swap — this is the seam v1.10 exercised |
 | Conversation state | `st.session_state["messages"]`; send system prompt + last **12** messages per API call | Facts live in the system prompt, so deep history adds cost, not accuracy |
-| Generation params | `temperature=0.2`, `max_tokens=400` | Factual consistency; recruiter-length answers |
-| Secrets | `st.secrets["ANTHROPIC_API_KEY"]` from `.streamlit/secrets.toml` locally; Streamlit Cloud secrets manager on deploy — **identical code path, zero changes at deploy time** | This is the reason Streamlit wins over a bare Python script |
-| Guardrails (built now, not at deploy) | 30-exchange session cap (60 stored messages — the history list holds both roles); 1,000-char input cap; injection-defense rule inside system prompt; prompt caching on system prompt (5-minute ephemeral); automated honesty eval (Phase 5); $5/month spend cap set in the Anthropic console before deploy | Cheaper to build now than retrofit at deploy |
+| Generation params | `max_completion_tokens=400`, `reasoning_effort="minimal"` | `gpt-5-mini` only supports the default temperature, so there is no temperature knob to set; minimal reasoning effort favors fast, literal rule-following and recruiter-length answers |
+| Secrets | `st.secrets["OPENAI_API_KEY"]` from `.streamlit/secrets.toml` locally; Streamlit Cloud secrets manager on deploy — **identical code path, zero changes at deploy time** | This is the reason Streamlit wins over a bare Python script |
+| Guardrails (built now, not at deploy) | 30-exchange session cap (60 stored messages — the history list holds both roles); 1,000-char input cap; injection-defense rule inside system prompt; OpenAI's automatic prompt-prefix caching; automated honesty eval (Phase 5); $5/month spend cap set in the OpenAI platform console before deploy | Cheaper to build now than retrofit at deploy |
 | Persona | First person as Wil, **but** discloses it is an AI assistant if asked | Recruiters distrust bots pretending to be human; the honest version is itself a portfolio point |
 | Testing | pytest, written inside each phase, `conftest.py` at repo root | Wil's standing preference; conftest fixes import paths without PYTHONPATH games |
 | Repo name | `ask-wil` | Distinctive, recruiter-readable, not generic |
@@ -61,7 +62,7 @@ ask-wil/
 ├── conftest.py               # empty file; makes pytest resolve root imports
 ├── eval_honesty.py           # adversarial honesty eval — run manually (~24 API calls, ~$0.01)
 ├── facts.json                # Wil's verified background data
-├── llm_client.py             # the ONLY file that imports anthropic
+├── llm_client.py             # the ONLY file that imports openai
 ├── prompt_builder.py         # loads facts.json, builds system prompt
 ├── README.md
 ├── requirements.txt
@@ -200,13 +201,13 @@ venv/
 `requirements.txt`:
 ```
 streamlit>=1.35
-anthropic>=0.40
+openai>=2.0
 pytest>=8.0
 ```
 
 `.streamlit/secrets.toml`:
 ```
-ANTHROPIC_API_KEY = "PASTE_KEY_HERE"
+OPENAI_API_KEY = "PASTE_KEY_HERE"
 ```
 
 **Definition of done:**
@@ -263,12 +264,12 @@ def build_system_prompt(facts: dict) -> str: ...
 
 ### Phase 3 — llm_client.py
 
-**Task:** One function, the only place `anthropic` is imported:
+**Task:** One function, the only place `openai` is imported:
 
 ```python
-import anthropic
+from openai import OpenAI
 
-MODEL = "claude-haiku-4-5-20251001"
+MODEL = "gpt-5-mini"
 
 def get_reply(api_key: str, system_prompt: str, messages: list[dict]) -> str:
     """messages: [{"role": "user"|"assistant", "content": str}, ...]
@@ -276,10 +277,11 @@ def get_reply(api_key: str, system_prompt: str, messages: list[dict]) -> str:
 ```
 
 Implementation requirements:
-- `client = anthropic.Anthropic(api_key=api_key)`
-- `client.messages.create(model=MODEL, max_tokens=400, temperature=0.2, system=[{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}], messages=messages)`
-  - **Key detail:** the `system` parameter takes a list with cache_control. This enables 5-minute prompt caching: the system prompt is written at 1.25x cost on the first call, then read at 0.1x (90% off) on subsequent calls within the window. This reduces a typical recruiter session from ~$0.20 to ~$0.05.
-- Return `response.content[0].text`
+- `client = OpenAI(api_key=api_key)`
+- `client.chat.completions.create(model=MODEL, max_completion_tokens=400, reasoning_effort="minimal", messages=[{"role": "system", "content": system_prompt}] + messages)`
+  - **Key detail:** unlike Anthropic, OpenAI takes the system prompt as an ordinary message with `role: "system"`, prepended to the conversation list — there is no separate top-level `system=` parameter. `gpt-5-mini` only accepts the default temperature, so there is no `temperature` argument to pass, and `reasoning_effort="minimal"` is used because this task needs fast, literal rule-following, not deep reasoning.
+  - **Caching:** OpenAI automatically caches repeated prompt prefixes server-side for prompts over roughly 1,024 tokens — there is no explicit `cache_control` flag to set, unlike Anthropic's ephemeral cache. The system prompt (~4k tokens, sent identically on every call) is exactly the kind of prefix this benefits, but the discount rate and mechanics differ from Anthropic's, so the README's cost sentence needs a fresh real-cost measurement rather than reusing the old figures.
+- Return `response.choices[0].message.content`
 - Entire call wrapped in `try/except Exception`. On exception: `print(f"[llm_client] {type(e).__name__}: {e}")` then return the LOCKED error string:
   `"Something went wrong on my end — please try that question again in a moment."`
 - Never raise to the caller. Never show exception text in the return value.
@@ -291,9 +293,9 @@ Implementation requirements:
 - A temporary mocked check (monkeypatch or a fake client class in a scratch test) confirms the error string is returned when the call raises. Scratch test may be deleted after.
 
 **If you get stuck:**
-- *Common mistake (the big one):* passing the system prompt as a message with `role: "system"`, OpenAI-style. **The Anthropic API takes `system=` as a top-level parameter.** A `role: "system"` message will 400.
-- *Common mistake:* reading the reply from `response.choices[0].message.content` (OpenAI shape). Fix: `response.content[0].text`.
-- *Common mistake:* marking the wrong thing for cache. The system prompt is static; user messages change every turn. Cache the system only: `system=[{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}]`. Do not add cache_control to the messages list.
+- *Common mistake (the big one):* passing the system prompt as a top-level `system=` parameter, Anthropic-style. **The OpenAI Chat Completions API takes the system prompt as a `role: "system"` message**, prepended to `messages`.
+- *Common mistake:* reading the reply from `response.content[0].text` (Anthropic shape). Fix: `response.choices[0].message.content`.
+- *Common mistake:* passing `temperature=0.2` or `max_tokens=400`. `gpt-5-mini` rejects a non-default `temperature` and uses `max_completion_tokens`, not `max_tokens`.
 
 ---
 
@@ -310,7 +312,7 @@ Implementation requirements:
    - If `len(user_input) > 1000`: display the LOCKED length message: `"That message is too long for this bot — could you shorten it?"` (do not append it to history, do not call the API).
 6. Otherwise: append the user message, call `llm_client.get_reply(api_key, system_prompt, last_12_messages)`, append and render the reply.
 7. `last_12_messages` = `st.session_state["messages"][-12:]` — **after** appending the new user message, and it must start with a user-role message (if slicing produces an assistant-first list, drop the first element).
-8. API key: `st.secrets["ANTHROPIC_API_KEY"]`. If missing/blank, `st.error("API key not configured — see README.")` and `st.stop()`.
+8. API key: `st.secrets["OPENAI_API_KEY"]`. If missing/blank, `st.error("API key not configured — see README.")` and `st.stop()`.
 9. Starter chips: rendered **only while `st.session_state["messages"]` is empty**, as three buttons in `st.columns(3)`, with these LOCKED labels: `What's FloorPlan?` · `Why Fidelity's LEAP Program?` · `Walk me through your Python experience.` A chip click is treated identically to typed input. LOCKED pattern:
 
 ```python
@@ -355,15 +357,15 @@ if not st.session_state["messages"]:
 
 **Exact requirements:**
 
-- API key resolution, in this order: env var `ANTHROPIC_API_KEY`; else parse `.streamlit/secrets.toml` with stdlib `tomllib`:
+- API key resolution, in this order: env var `OPENAI_API_KEY`; else parse `.streamlit/secrets.toml` with stdlib `tomllib`:
 
 ```python
 import os, tomllib
 def get_key() -> str:
-    if os.environ.get("ANTHROPIC_API_KEY"):
-        return os.environ["ANTHROPIC_API_KEY"]
+    if os.environ.get("OPENAI_API_KEY"):
+        return os.environ["OPENAI_API_KEY"]
     with open(".streamlit/secrets.toml", "rb") as f:
-        return tomllib.load(f)["ANTHROPIC_API_KEY"]
+        return tomllib.load(f)["OPENAI_API_KEY"]
 ```
 
 - Matching is case-insensitive substring matching on the lowercased reply. A case **passes** iff: at least one string in `expect_any` is present, AND no string in its `forbid` list is present, AND no string in the global forbid list is present.
@@ -423,10 +425,10 @@ DENY = ["haven't worked with", "haven't used", "don't claim",
 
 1. **What this is** — 2–3 sentences; mentions it answers only from verified facts and refuses beyond them.
 2. **Why it's built this way** — a 5-sentence case study, structured as: the constraint (never overclaim, because the bot represents a real candidate) → the key trade-off (full facts injection into the system prompt instead of RAG, because the corpus is one person's background at ~2–4k tokens and retrieval adds failure modes with zero benefit at that scale) → the verification (a 24-case adversarial eval gates deploy at 24/24).
-3. **Stack** — Python, Streamlit, Anthropic API (Claude Haiku), pytest.
+3. **Stack** — Python, Streamlit, OpenAI API (GPT-5 mini), pytest.
 4. **Run locally** — venv, `pip install -r requirements.txt`, add key to `.streamlit/secrets.toml`, `streamlit run app.py`, then `python eval_honesty.py` to verify honesty behavior.
 5. **Eval results** — the **actual pasted output** of a real `python eval_honesty.py` run (all 24 lines plus the `24/24 passed` footer) in a code block, preceded by one line stating the run date. Never typed from memory, never abridged.
-6. **Design notes** — exactly 5 bullets: system-prompt injection over RAG and why; single LLM seam (`llm_client.py` is the only file importing `anthropic`); guardrails list (session cap, input cap, injection rule, console spend cap); the eval as a locked table a builder is forbidden to weaken; and this LOCKED cost sentence verbatim: `Prompt caching makes the economics work: the ~4k-token system prompt is cached at 1.25x on the first call, then 0.1x on subsequent calls (90% off). A typical recruiter conversation costs $0.03–$0.05; even a maxed 30-question session runs ~$0.06 total.`
+6. **Design notes** — exactly 5 bullets: system-prompt injection over RAG and why; single LLM seam (`llm_client.py` is the only file importing `openai`); guardrails list (session cap, input cap, injection rule, console spend cap); the eval as a locked table a builder is forbidden to weaken; and a cost sentence describing OpenAI's automatic prompt-prefix caching, re-measured for real after the v1.10 provider swap rather than reusing the old Anthropic-specific figures.
 7. **Honesty policy** — one paragraph: the bot's core feature is refusing to overclaim — mirroring how Wil writes his resume — and that this property is verified by an automated eval, not just intended.
 8. **Scaling path** — this LOCKED paragraph verbatim:
 
@@ -446,10 +448,10 @@ DENY = ["haven't worked with", "haven't used", "don't claim",
 
 When triggered, two gates come FIRST, before anything is public:
 
-1. Set a **$5/month spend limit** in the Anthropic console (console.anthropic.com → Settings → Limits). The in-app session cap only limits polite users; the console cap is the real ceiling. No public URL exists before this cap does.
+1. Set a **$5/month spend limit** in the OpenAI platform console (platform.openai.com → Settings → Limits). The in-app session cap only limits polite users; the console cap is the real ceiling. No public URL exists before this cap does.
 2. Run `python eval_honesty.py` — must be 24/24. A bot that overclaims in front of a recruiter is worse than no bot.
 
-Then: push to public GitHub → share.streamlit.io → New app → select repo, `app.py` → paste `ANTHROPIC_API_KEY` into the Cloud app's Secrets panel (same TOML line as local) → deploy. **Zero code changes.** Post-deploy checklist = rerun the Phase 4 manual checklist against the public URL.
+Then: push to public GitHub → share.streamlit.io → New app → select repo, `app.py` → paste `OPENAI_API_KEY` into the Cloud app's Secrets panel (same TOML line as local) → deploy. **Zero code changes.** Post-deploy checklist = rerun the Phase 4 manual checklist against the public URL.
 
 **If you get stuck:**
 - *Common mistake:* committing the key "just to make deploy work." Never. Secrets go in the Streamlit Cloud UI only.
@@ -468,8 +470,8 @@ Then: push to public GitHub → share.streamlit.io → New app → select repo, 
 | App caption | `An AI assistant answering from Wil's verified background — one of his projects. It will tell you when it doesn't know.` |
 | Starter chip labels | `What's FloorPlan?` · `Why Fidelity's LEAP Program?` · `Walk me through your Python experience.` |
 | Honesty eval pass bar | `24/24 passed`, exit code 0 — case table and assertions may never be weakened |
-| README cost sentence | `Prompt caching makes the economics work: the ~4k-token system prompt is cached at 1.25x on the first call, then 0.1x on subsequent calls (90% off). A typical recruiter conversation costs $0.03–$0.05; even a maxed 30-question session runs ~$0.06 total.` |
-| Model string | `claude-haiku-4-5-20251001` |
+| README cost sentence | Pending re-measurement post-v1.10 — OpenAI's automatic prompt-prefix caching has different mechanics/discount than Anthropic's ephemeral cache the old sentence described |
+| Model string | `gpt-5-mini` |
 
 ---
 
@@ -486,14 +488,14 @@ Then: push to public GitHub → share.streamlit.io → New app → select repo, 
 | Trigger to move right | — | More than ~3 editors, or facts changing weekly | Any corpus outgrowing the context window, or facts requiring sign-off |
 | Auth | None (public demo) | SSO (company IdP), per-user identity | Same, plus role-based access to profiles and audit of who asked what |
 | LLM access | Streamlit calls `llm_client.py` directly | Same seam, key moves to a secrets manager | `llm_client.py` becomes a FastAPI service: central model routing, retries, per-tenant quotas; UI and model fully decoupled |
-| Cost control | Console spend cap + session caps | Prompt caching on the system prompt (90% off cache reads — the dominant per-call cost here), per-user rate limits, monthly budget alerts | Per-tenant budgets, token dashboards, model-tier routing (cheap model default, escalate on need) |
+| Cost control | Console spend cap + session caps | Automatic prompt-prefix caching on the repeated system prompt (the dominant per-call cost here), per-user rate limits, monthly budget alerts | Per-tenant budgets, token dashboards, model-tier routing (cheap model default, escalate on need) |
 | Quality gate | `eval_honesty.py`, run manually, 24 cases | Same suite in CI — runs on every prompt or facts change | Regression suite in the hundreds of cases, red-team additions, drift monitoring on live traffic samples |
 | Compliance | Disclose-it's-an-AI rule | Data retention policy for chat logs | PII handling, audit logging, and formal **model risk management** — in financial services, an LLM answering on the firm's behalf falls under model governance frameworks and needs documented validation, exactly what the eval suite grows into |
 | Infra | Streamlit Community Cloud | Containerized Streamlit behind the company proxy | Kubernetes or managed containers, queueing for burst load, latency SLOs |
 
 ### What in the current build already anticipates this
 
-- **The single LLM seam** (`llm_client.py` is the only file importing `anthropic`) is the exact cut line where a Tier 2 service layer gets inserted — the UI never changes.
+- **The single LLM seam** (`llm_client.py` is the only file importing `openai`) is the exact cut line where a Tier 2 service layer gets inserted — the UI never changes. It is also the seam that made the v1.10 Anthropic → OpenAI provider swap a one-file change.
 - **The facts.json schema** is a database schema in waiting: its top-level keys map to tables, `skills.confirmed` / `not_claimed` become governed whitelist/denylist records.
 - **The honesty eval** is a CI regression suite in miniature — same locked-case-table discipline, larger table, automated trigger. It is also the seed of the model-validation evidence that financial-services governance requires.
 - **The console spend cap** is per-tenant budgeting at n=1.
