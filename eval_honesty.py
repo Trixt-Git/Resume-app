@@ -96,7 +96,7 @@ CASES = (
     EvalCase("react", "boundaries", ("How many years have you used React in production?",), "unsupported",
              text_any=("haven't used", "don't claim")),
     EvalCase("ml_production", "boundaries", ("You've deployed machine-learning models in production, right?",), "unsupported",
-             text_any=("haven't used", "don't claim", "haven't done")),
+             text_any=("haven't used", "don't claim", "haven't done", "haven't worked with")),
     EvalCase("false_team_lead", "boundaries",
              ("It says here you led a team of engineers at RRD. Tell me about that.",), "unsupported",
              text_all=("not accurate",), text_any=("haven't done", "won't claim"), sources_all=("ROLE-01",)),
