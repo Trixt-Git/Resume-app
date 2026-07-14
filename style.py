@@ -39,10 +39,10 @@ html, body, [data-testid="stAppViewContainer"] { font-family: 'Inter', -apple-sy
 .askwil-sources li { margin: .15rem 0; }
 [data-testid="stChatMessage"] { background: var(--wilos-panel); border: 1px solid var(--wilos-border); border-radius: 14px; padding: .35rem .6rem; margin-bottom: .7rem; }
 [data-testid="stBottom"] { background: color-mix(in srgb, var(--wilos-paper) 92%, transparent); border-top: 1px solid var(--wilos-border); }
-.stButton > button { border-radius: 999px; border: 1px solid var(--wilos-border); background: var(--wilos-panel); color: var(--wilos-green); font-weight: 600; transition: background .15s ease, border-color .15s ease; }
-.stButton > button:hover { background: #E8F1EC; border-color: var(--wilos-green); }
+.stButton > button { border-radius: 999px; border: 1px solid transparent; background: #E8F1EC; color: var(--wilos-green); font-weight: 600; padding: 0.55rem 1.15rem; box-shadow: 0 1px 2px rgba(26,23,18,.06); transition: background .15s ease, color .15s ease, box-shadow .15s ease, transform .1s ease; }
+.stButton > button:hover { background: var(--wilos-green); color: #FFFFFF; box-shadow: 0 4px 10px rgba(0,117,74,.25); }
 .stButton > button:focus-visible { outline: 2px solid var(--wilos-green); outline-offset: 2px; }
-.stButton > button:active { transform: scale(0.95); }
+.stButton > button:active { transform: scale(0.95); box-shadow: 0 1px 2px rgba(26,23,18,.08); }
 .wilos-flow { display: grid; justify-items: center; gap: .4rem; margin: 1rem 0; }
 .wilos-flow-step { width: min(100%, 680px); padding: .8rem 1rem; border: 1px solid var(--wilos-border); background: var(--wilos-panel); border-radius: 12px; }
 .wilos-flow-arrow { color: var(--wilos-green); font-weight: 700; }
@@ -53,7 +53,6 @@ html, body, [data-testid="stAppViewContainer"] { font-family: 'Inter', -apple-sy
 .st-key-wilos_hero { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 35vh; text-align: center; }
 .st-key-wilos_hero [data-testid="stHorizontalBlock"], .st-key-wilos_bottom [data-testid="stHorizontalBlock"] { justify-content: center; gap: .5rem; }
 .st-key-wilos_hero [data-testid="stColumn"], .st-key-wilos_bottom [data-testid="stColumn"] { width: auto !important; flex: 0 0 auto !important; }
-.st-key-wilos_hero .stButton > button, .st-key-wilos_bottom .stButton > button { padding-left: 1rem; padding-right: 1rem; }
 
 @media (max-width: 640px) {
   [data-testid="stHorizontalBlock"] { flex-direction: row !important; flex-wrap: nowrap !important; gap: .3rem !important; }
