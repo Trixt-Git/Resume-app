@@ -31,5 +31,10 @@ STYLE = r'''
 .wilos-flow { display: grid; justify-items: center; gap: .4rem; margin: 1rem 0; }
 .wilos-flow-step { width: min(100%, 680px); padding: .8rem 1rem; border: 1px solid var(--wilos-border); background: var(--wilos-panel); border-radius: 12px; }
 .wilos-flow-arrow { color: var(--wilos-green); font-weight: 700; }
+@media (max-width: 640px) {
+  [data-testid="stHorizontalBlock"] { flex-wrap: nowrap !important; gap: .3rem !important; }
+  [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] { min-width: 0 !important; flex: 1 1 0 !important; width: auto !important; }
+  [data-testid="stColumn"] .stButton > button { padding-left: .3rem; padding-right: .3rem; font-size: .8rem; }
+}
 </style>
 '''
