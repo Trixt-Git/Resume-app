@@ -58,7 +58,7 @@ html, body, [data-testid="stAppViewContainer"] { font-family: 'Inter', -apple-sy
 @media (max-width: 640px) {
   [data-testid="stHorizontalBlock"] { flex-direction: row !important; flex-wrap: nowrap !important; gap: .3rem !important; }
   [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] { min-width: 0 !important; flex: 1 1 0 !important; width: auto !important; }
-  [data-testid="stColumn"] .stButton > button { padding-left: .25rem; padding-right: .25rem; font-size: .78rem; white-space: nowrap; }
+  [data-testid="stColumn"] .stButton > button { min-width: 0; padding-left: .25rem; padding-right: .25rem; font-size: .78rem; white-space: nowrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
