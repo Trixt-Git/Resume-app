@@ -54,6 +54,23 @@ def test_prompt_keeps_sensitive_responses_verbatim_and_allows_pleasantries():
     assert "pleasantries" in text
 
 
+def test_prompt_keeps_the_voice_guide():
+    # The v1 voice guide was silently flattened once during the structured-
+    # output rewrite; these anchors keep its load-bearing pieces from
+    # disappearing again.
+    text = prompt()
+    assert "not a resume reading itself aloud" in text
+    assert "don't write in a monotone" in text
+    assert "No cheerleader energy" in text
+    assert "Honesty always outranks voice" in text
+
+
+def test_prompt_varies_offtopic_redirects_instead_of_one_script():
+    text = prompt()
+    assert "Vary the phrasing between redirects" in text
+    assert '"verified background"' in text
+
+
 def test_prompt_contains_current_linkedin_and_not_rehire_language():
     text = prompt()
     assert "https://www.linkedin.com/in/wil-uhlir/" in text

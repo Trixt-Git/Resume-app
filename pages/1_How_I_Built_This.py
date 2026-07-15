@@ -111,10 +111,18 @@ the *behavior* is still locked — a denial must open with an explicit negative 
 may never hedge — but the *phrasing* is the model's own, so refusals vary the way
 a person's would.
 
-Two categories stay scripted on purpose. Stored sensitive answers (salary, past
+One category stays scripted on purpose: stored sensitive answers (salary, past
 departures) are reproduced verbatim because their wording is a disclosure control,
-not a style choice. And greetings or a "thanks!" get one brief natural sentence
-instead of a policy statement, because nothing factual is at stake there.
+not a style choice. Everything else loosened. Casual off-topic questions get a
+varied, self-aware redirect ("Wil loaded me with career facts, not movie takes")
+instead of one stock sentence, and greetings or a "thanks!" get one brief natural
+sentence instead of a policy statement, because nothing factual is at stake there.
+
+There is also a real voice guide, not just "be friendly": vary sentence rhythm
+instead of writing in a monotone, use tactile words ("bottleneck," not
+"suboptimal condition"), no cheerleader energy, dry humor in small doses — and
+honesty always outranks voice. If sounding good would require softening a fact,
+the flourish gets dropped, not the fact.
 
 Beyond refusals, the prompt gives the model a decision process: answer in the
 first sentence, select the smallest useful evidence set, use one matching story

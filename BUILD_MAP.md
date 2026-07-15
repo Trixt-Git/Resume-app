@@ -124,13 +124,28 @@ with an explicit negative ("haven't used," "haven't worked with," "won't
 claim") and must never hedge, but the sentence is the model's own so repeated
 refusals do not sound identical. Two categories remain word-for-word:
 
-- Stored `sensitive_topics` responses are reproduced verbatim as a disclosure
-  control.
-- The out-of-scope response is used verbatim for unsupported casual questions.
+Stored `sensitive_topics` responses remain reproduced verbatim as a disclosure
+control — the one deliberately scripted category.
+
+Unsupported casual questions get a varied, self-aware redirect in the model's
+own words. It must contain the phrase "verified background" (the evaluation
+anchor), must not guess or offer a real opinion, and must steer back to
+verified topics; `sensitive_topics.out_of_scope.response` documents the plain
+fallback shape rather than serving as a script. This restores the v1.9
+varied-redirect behavior that the v2.0 rewrite had collapsed into a single
+stock sentence.
 
 Pure pleasantries (greetings, thanks, goodbyes) receive one brief natural
-sentence classified `off_topic` with no sources, rather than the stored
-out-of-scope response.
+sentence classified `off_topic` with no sources.
+
+### Voice guide
+
+The prompt carries the full v1 voice guide, adapted: peer-to-peer register,
+contractions, mixed sentence rhythm (long context sentence, short blunt
+close), tactile word choices, no cheerleader energy, physical metaphors over
+corporate abstractions, dry humor in small doses, and an explicit precedence
+rule that honesty always outranks voice. Prompt tests anchor these phrases so
+the guide cannot be silently dropped in a future rewrite.
 
 ## 7. Structured response contract
 

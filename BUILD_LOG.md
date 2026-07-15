@@ -126,3 +126,12 @@ chronological order; nothing is rewritten after the fact.*
 - Broadened the unsupported-claim eval anchors into a shared `DENIAL_MARKERS` set and added a `pleasantry_close` conversation case (30 cases, 90 calls per full run). The 29/29 July 13 score predates this revision; a fresh live run is required before publishing a new score.
 - Rebuilt the How I Built This page: leads with the failure a naive resume bot exhibits, shows a real refusal exchange with its source label, gives prompt injection its own section, reports live suite counts imported from `eval_honesty.py`, explains prompt caching, and ends with "try to break it" prompts. Avoided `st.page_link` because the local and deployed entrypoints register different main pages.
 - Updated prompt tests for the unscripted-denial contract and added a smoke test for the How I Built This page.
+
+## Voice guide restoration — 2026-07-15
+
+- Found that the v2.0 structured-output rewrite had flattened the v1 voice guide: the rhythm, tactile-word, no-cheerleader-energy, mechanical-metaphor, and honesty-outranks-voice guidance was reduced to one short paragraph, and the v1.9 six-style casual redirects collapsed back into a single stock out-of-scope sentence — the exact repetitiveness v1.9 existed to fix.
+- Restored the full voice guide into the VOICE section, merged with the newer contraction/yes-no-first/follow-up rules.
+- Replaced the verbatim out-of-scope script with a varied self-aware redirect in the model's own words, anchored on the phrase "verified background" so the evaluation stays checkable. Stored sensitive responses remain the only verbatim category. Added a second off-topic few-shot example to demonstrate variation.
+- Loosened the four off-topic eval anchors from the full stock sentence to the "verified background" anchor.
+- Added prompt regression tests that pin the voice-guide anchors and the vary-redirects instruction, so the guide cannot be silently dropped in a future rewrite again.
+- Updated BUILD_MAP and the How I Built This page to match. A fresh live eval run is still required before publishing a new behavioral score.
