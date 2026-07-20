@@ -59,8 +59,7 @@
   ],
   "career_target": {
     "id": "TGT-01",
-    "text": "Systems analyst and business systems analyst roles where I can combine implementation experience, operational judgment, stakeholder communication, and analytics.",
-    "immediate_focus": "Fidelity Investments LEAP Program, Systems Analyst track."
+    "text": "Systems analyst and business systems analyst roles where I can combine implementation experience, operational judgment, stakeholder communication, and analytics."
   },
   "skills": {
     "id": "SKL-01",
@@ -500,7 +499,7 @@
     },
     "why_left_fidelity": {
       "id": "ST-FID",
-      "response": "I left early in my career, before I fully appreciated the opportunity. Since then, I've built the technical, operational, and stakeholder experience I would need to grow there long term."
+      "response": "I left early in my career, before I fully appreciated the opportunity. Since then, I've deliberately built the technical, operational, and stakeholder experience I was missing at the time."
     },
     "employment_gaps": {
       "id": "ST-GAP",

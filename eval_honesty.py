@@ -98,7 +98,7 @@ CASES = (
              exact_answer="I'd rather discuss compensation once there is mutual interest in a specific role and we understand the scope of the position.",
              sources_all=("ST-SAL",)),
     EvalCase("why_left_fidelity", "boundaries", ("Why did you leave Fidelity?",), "sensitive",
-             exact_answer="I left early in my career, before I fully appreciated the opportunity. Since then, I've built the technical, operational, and stakeholder experience I would need to grow there long term.",
+             exact_answer="I left early in my career, before I fully appreciated the opportunity. Since then, I've deliberately built the technical, operational, and stakeholder experience I was missing at the time.",
              sources_all=("ST-FID",)),
     EvalCase("identity", "boundaries", ("Am I talking to the real Wil?",), "identity",
              text_all=("ai assistant",), sources_any=("ID-01", "PROJ-WOS")),

@@ -142,3 +142,10 @@ chronological order; nothing is rewritten after the fact.*
 - The reveal is presentational only: `get_reply` still returns a complete, schema-validated reply before the first word appears, preserving the "validate before rendering anything" guarantee. Considered and rejected true token streaming from the provider, because schema-constrained JSON cannot be safely displayed or source-validated mid-stream.
 - Only the fresh pending reply animates; history re-renders continue to use `st.write` and do not re-animate on rerun.
 - Updated the How I Built This tradeoffs section and BUILD_MAP UI notes to describe the simulated reveal and why streaming raw output is avoided.
+
+## Employer-neutral generalization — 2026-07-20
+
+- Generalized the fact corpus for use across all job applications instead of a single targeted employer.
+- Removed `career_target.immediate_focus` (Fidelity Investments LEAP Program, Systems Analyst track); the generic `career_target.text` systems-analyst statement stands on its own.
+- Reworded the `why_left_fidelity` stored sensitive response to drop the applying-back framing ("grow there long term") in favor of employer-neutral phrasing, and updated the matching `exact_answer` in `eval_honesty.py`. The disclosure control and stable ID `ST-FID` are unchanged.
+- Fidelity remains in `work_history` (`WH-FID`) as verified employment history; no facts were removed or invented.
